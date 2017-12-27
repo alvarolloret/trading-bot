@@ -38,7 +38,7 @@ def main(argv):
 			endTime = arg
 
 	if (startTime):
-		chart = BotChart("poloniex","BTC_XMR",300)
+		chart = BotChart("poloniex",pair, period, startTime, endTime)
 
 		strategy = BotStrategy()
 
@@ -46,7 +46,7 @@ def main(argv):
 			strategy.tick(candlestick)
 
 	else:
-		chart = BotChart("poloniex","BTC_XMR",300,False)
+		chart = BotChart("poloniex",pair, period, startTime, endTime, False)
 		
 		strategy = BotStrategy()
 
