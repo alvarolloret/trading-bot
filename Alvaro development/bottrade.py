@@ -1,10 +1,12 @@
 from botlog import BotLog
+import datetime
 
 class BotTrade(object):
-	def __init__(self,currentPrice,stopLoss=0):
+	def __init__(self,time,currentPrice,stopLoss=0):
 		self.output = BotLog()
 		self.status = "OPEN"
 		self.entryPrice = currentPrice
+		self.time = time
 		self.exitPrice = ""
 		self.output.log("Trade opened")
 		if (stopLoss):
@@ -22,7 +24,7 @@ class BotTrade(object):
 
 
 	def showTrade(self):
-		tradeStatus = "Entry Price: "+str(self.entryPrice)+" Status: "+str(self.status)+" Exit Price: "+str(self.exitPrice)
+		tradeStatus = datetime.datetime.fromtimestamp(self.time).strftime('%Y-%m-%d %H:%M:%S')+" "+ str(self.status) + " Entry: "+str(self.entryPrice)+" Exit: "+str(self.exitPrice)
 
 		if (self.status == "CLOSED"):
 			tradeStatus = tradeStatus + " Profit: "

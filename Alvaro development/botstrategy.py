@@ -9,12 +9,14 @@ class BotStrategy(object):
 		self.closes = [] # Needed for Momentum Indicator
 		self.trades = []
 		self.currentPrice = ""
+		self.currentTime=""
 		self.currentClose = ""
 		self.numSimulTrades = 1
 		self.indicators = BotIndicators()
 
-	def tick(self,candlestick):
+	def tick(self,candlestick): #where a candlestick is a an item of the list BotChart.getPoints
 		self.currentPrice = float(candlestick.priceAverage)
+		self.currentTime = candlestick.date
 		self.prices.append(self.currentPrice)
 		
 		#self.currentClose = float(candlestick['close'])
@@ -34,7 +36,7 @@ class BotStrategy(object):
 
 		if (len(openTrades) < self.numSimulTrades):
 			if (self.currentPrice < self.indicators.movingAverage(self.prices,15)):
-				self.trades.append(BotTrade(self.currentPrice,stopLoss=.0001))
+				self.trades.append(BotTrade(self.currentTime,self.currentPrice,stopLoss=.0001))
 
 		for trade in openTrades:
 			if (self.currentPrice > self.indicators.movingAverage(self.prices,15)):

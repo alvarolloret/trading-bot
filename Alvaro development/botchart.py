@@ -1,6 +1,7 @@
 from poloniex import poloniex
 import urllib, json
 import pprint
+import datetime
 from botcandlestick import BotCandlestick
 
 class BotChart(object):
@@ -20,6 +21,9 @@ class BotChart(object):
 			self.conn = poloniex(self.api_key,self.api_secret)
 
 			if backtest:
+				print "Checking the data from "+datetime.datetime.fromtimestamp(int(startTime)).strftime('%Y-%m-%d %H:%M:%S') + " to " + datetime.datetime.fromtimestamp(int(endTime)).strftime('%Y-%m-%d %H:%M:%S') 
+				
+				
 				poloData = self.conn.api_query("returnChartData",{"currencyPair":self.pair,"start":self.startTime,"end":self.endTime,"period":self.period})
 				
 				
@@ -28,7 +32,7 @@ class BotChart(object):
 					#datum is a dict = {key1:value1, key2:value2, ... }
 					if (datum['open'] and datum['close'] and datum['high'] and datum['low']):
 						#putting all this data to the BotCandlestick object
-						self.data.append(BotCandlestick(self.period,datum['open'],datum['close'],datum['high'],datum['low'],datum['weightedAverage']))
+						self.data.append(BotCandlestick(self.period,datum['open'],datum['close'],datum['high'],datum['low'],datum['weightedAverage'], datum['date']))
 
 		if (exchange == "bittrex"):
 			if backtest:
