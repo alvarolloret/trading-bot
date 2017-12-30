@@ -44,7 +44,8 @@ def main(argv):
 
 		for candlestick in chart.getPoints():
 			strategy.tick(candlestick)
-
+		
+		strategy.showMargin()
 	else:
 		chart = BotChart("poloniex",pair, period, startTime, endTime, False)
 		
