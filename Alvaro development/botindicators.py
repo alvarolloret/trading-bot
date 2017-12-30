@@ -4,9 +4,11 @@ class BotIndicators(object):
 	def __init__(self):
 		 pass
 
-	def movingAverage(self, dataPoints, period):
+	def movingAverage(self, dataPoints, period,currentPrice):
 		if (len(dataPoints) > 1):
 			return sum(dataPoints[-period:]) / float(len(dataPoints[-period:]))
+		else:
+			return currentPrice
 
 	def momentum (self, dataPoints, period=14):
 		if (len(dataPoints) > period -1):
@@ -53,3 +55,5 @@ class BotIndicators(object):
  			return rsi[-1]
  		else:
  			return 50 # output a neutral amount until enough prices in list to calculate RSI
+
+		

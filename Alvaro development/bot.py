@@ -1,6 +1,5 @@
 import sys, getopt
 import time
-import pprint
 
 from botchart import BotChart
 from botstrategy import BotStrategy
@@ -39,7 +38,8 @@ def main(argv):
 
 	if (startTime):
 		chart = BotChart("poloniex",pair, period, startTime, endTime)
-
+		chart.createChart()
+		
 		strategy = BotStrategy()
 
 		for candlestick in chart.getPoints():
