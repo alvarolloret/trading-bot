@@ -7,10 +7,14 @@ from botlog import BotLog
 from botcandlestick import BotCandlestick
 
 def main(argv):
-
+	
 	startTime = False
 	endTime = False
-
+	
+	
+	#-----------------------------------------------------------------#
+	#-------------------Part 0: Passing arguments---------------------#
+	#-----------------------------------------------------------------#
 	try:
 		opts, args = getopt.getopt(argv,"hp:c:n:s:e:",["period=","currency=","points="])
 	except getopt.GetoptError:
@@ -35,17 +39,52 @@ def main(argv):
 			startTime = arg
 		elif opt in ("-e"):
 			endTime = arg
-
+	#---------------END: Part 0: Passing arguments---------------------#		
+			
+			
+			
+			
+			
+			
+	#-----------------------------------------------------------------#
+	#-------------------Part 1: Backtesting---------------------------#
+	#-----------------------------------------------------------------#
 	if (startTime):
+	
+		#--------------------------------------------------------------#
+		#---------Part 1.1: picking up the data from the market--------#
+		#--------------------------------------------------------------#
 		chart = BotChart("poloniex",pair, period, startTime, endTime)
-		chart.createChart()
 		
+		
+		
+		#--------------------------------------------------------------#
+		#---------Part 1.2: initialisating the bot strategy------------#
+		#--------------------------------------------------------------#
 		strategy = BotStrategy()
 
+		
+		
+		
+		#--------------------------------------------------------------#
+		#---------Part 1.3: Evaluating each candlestic from the chart--#
+		#--------------------------------------------------------------#
+		#--------------------USING THE STRATEGY TICK-------------------#
+		#--------------------------------------------------------------#
 		for candlestick in chart.getPoints():
 			strategy.tick(candlestick)
 		
+		
+		
+		
+		
 		strategy.showMargin()
+		chart.createChart(strategy.trades)
+	#---------------END: Part 1: Backtesting--------------------#	
+	
+	
+	
+	
 	else:
 		chart = BotChart("poloniex",pair, period, startTime, endTime, False)
 		
