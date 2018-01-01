@@ -15,6 +15,7 @@ class BotCandlestick(object):
 		self.period = period
 		self.output = BotLog()
 		self.priceAverage = priceAverage
+		self.label='null'
 
 	def tick(self,price,date):
 		self.current = float(price)

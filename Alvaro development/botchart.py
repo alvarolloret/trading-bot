@@ -42,7 +42,7 @@ class BotChart(object):
 				self.poloData = self.conn.api_query("returnChartData",{"currencyPair":self.pair,"start":self.startTime,"end":self.endTime,"period":self.period})
 				
 				
-				#A:poloData is an list (checked with the funtion type(), where each item of the list contains 4 values of the period 
+				#A:poloData is an list (checked with the funtion type(), where each item of the list contains 6 values of the period 
 				for datum in self.poloData:
 					#datum is a dict = {key1:value1, key2:value2, ... }
 					if (datum['open'] and datum['close'] and datum['high'] and datum['low']):
@@ -94,14 +94,11 @@ class BotChart(object):
 				break
 		return lastPrices[-period:]
 		
-	def createChart(self,trades):
-		self.trades=trades
-		historicalData=self.poloData
+	def createChart(self):
+		historicalData=self.data
 		dataPoints = []
 		movingAverages=[]
 		movingAverage=0
-		tradeCompleted=0 #a trade is completed when it sums 2 --> 1 for buy & 1 for sell
-		numOfTrades=0
 		label='null'
 		output = open("output.html",'w')
 		output.truncate()
@@ -116,37 +113,26 @@ class BotChart(object):
 		data.addColumn({type: 'string', role:'annotation'});
 		data.addColumn({type: 'string', role:'annotationText'});
 		data.addColumn('number', 'movingAverage');
+		data.addColumn('number', 'movingAverage2');
 		data.addRows([""")
 		
 		while True:
 			#step 0: iterating over data points
 			if (self.startTime and historicalData):
 				nextDataPoint = historicalData.pop(0)  #https://stackoverflow.com/a/4426727/5176549
-				lastPairPrice = nextDataPoint['weightedAverage']
+				lastPairPrice = nextDataPoint.priceAverage
 				movingAverages.append(lastPairPrice)
 				movingAverage=self.indicators.movingAverage(movingAverages,self.vars.movingAvPeriod,lastPairPrice)
-				dataDate = datetime.datetime.fromtimestamp(int(nextDataPoint['date'])).strftime('%Y-%m-%d %H:%M:%S')
+				movingAverage2=self.indicators.movingAverage(movingAverages,self.vars.movingAvPeriod2,lastPairPrice)
+				label=nextDataPoint.label
+				dataDate = datetime.datetime.fromtimestamp(int(nextDataPoint.date)).strftime('%Y-%m-%d %H:%M:%S')
 				#adding the trades on the label
 				
-				# if (not not trades) and int(trades[0].entryTime)==int(nextDataPoint['date']):
-					# label="'Buy'"
-					# tradeCompleted+=1
-				# elif (not not trades) and int(trades[0].exitTime)==int(nextDataPoint['date']):
-					# label="'Sell'"
-					# tradeCompleted+=1
-				# elif (not not trades) and tradeCompleted==2:
-					# trades.pop(0)
-					# tradeCompleted=0
-					# numOfTrades+=1
-					# label='null'
-				# else:
-					# label='null'
 				
-				
-			#step 2: adding all the info in the chart
+			#step 2: once the iteration is finished, adding all the info in the chart
 			elif(self.startTime and not historicalData):
 				for point in dataPoints:
-					output.write("['"+point['date']+"',"+point['price']+","+point['label']+","+point['desc']+","+point['trend'])
+					output.write("['"+point['date']+"',"+point['price']+","+point['label']+","+point['desc']+","+point['movAv1']+","+point['movAv2'])
 					output.write("],\n")
 				output.write("""]);
 				var options = {title: 'Price Chart',legend: { position: 'bottom' }};
@@ -155,7 +141,6 @@ class BotChart(object):
 				}</script></head>
 				<body><div id="curve_chart" style="width: 100%; height: 100%"></div></body>
 				</html>""")
-				print "NnumOfTrades: "+str(numOfTrades)+" num2 of points: "+str(len(dataPoints))
 				break
 				
 			#step 1: addind the last point on the list
@@ -168,7 +153,8 @@ class BotChart(object):
 			dataPoints.append({
 			'date':dataDate,
 			'price': str(lastPairPrice),
-			'trend': str(movingAverage),
+			'movAv1': str(movingAverage),
+			'movAv2': str(movingAverage2),
 			'label': label,
 			'desc': 'null'})
 			

@@ -5,8 +5,11 @@ class botVariables(object):
 		self.pair="USDT_BTC"
 		self.period=300
 		
-		self.movingAvPeriod = 20
+		self.movingAvPeriod = 10
+		self.movingAvPeriod2 = 21
 		self.initialInvestment = 100 #in euros
+		
+		self.stopLoss=500 #in the pair, for examle BTC_USD
 		
 		self.makeFee=0.0015 #0.15% of the buying fees
 		self.takeFee=0.0025 #0.25% of the selling fees

@@ -79,7 +79,7 @@ def main(argv):
 		
 		
 		strategy.showMargin()
-		chart.createChart(strategy.trades)
+		chart.createChart()
 	#---------------END: Part 1: Backtesting--------------------#	
 	
 	

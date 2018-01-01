@@ -48,15 +48,15 @@ class BotStrategy(object):
 		#self.currentClose = float(candlestick['close'])
 		#self.closes.append(self.currentClose)
 		
-		self.output.log(datetime.datetime.fromtimestamp(self.currentTime).strftime('%Y-%m-%d %H:%M:%S')+" - Price: "+str(candlestick.priceAverage)+"\tMoving Average: "+str(self.indicators.movingAverage(self.prices,15,self.currentPrice)))
+		#self.output.log(datetime.datetime.fromtimestamp(self.currentTime).strftime('%Y-%m-%d %H:%M:%S')+" - Price: "+str(candlestick.priceAverage)+"\tMoving Average: "+str(self.indicators.movingAverage(self.prices,self.vars.movingAvPeriod,self.currentPrice)))
 
-		self.evaluatePositions()
-		# self.updateOpenTrades()
+		self.evaluatePositions(candlestick)
+		self.updateOpenTrades(candlestick)
 		self.showPositions()
 
 		
 		
-	def evaluatePositions(self):
+	def evaluatePositions(self,candlestic):
 		openTrades = []
 		for trade in self.trades:
 			if (trade.status == "OPEN"):
@@ -68,22 +68,28 @@ class BotStrategy(object):
 			#--------------------------------------------------------------#
 			#------Part 1.3.A: Adding a trade if the conditions are met----#
 			#--------------------------------------------------------------#
-			if (self.currentPrice < self.indicators.movingAverage(self.prices,15,self.currentPrice)):
-				self.output.log("Trade Opened. Currentprice: "+str(self.currentPrice)+", MovAverage: "+str(self.indicators.movingAverage(self.prices,15,self.currentPrice)))
+			if self.indicators.movingAverage(self.prices,self.vars.movingAvPeriod2,self.currentPrice) < self.indicators.movingAverage(self.prices,self.vars.movingAvPeriod,self.currentPrice):
+				#self.output.log("Trade Opened. Currentprice: "+str(self.currentPrice)+", MovAverage: "+str(self.indicators.movingAverage(self.prices,self.vars.movingAvPeriod,self.currentPrice)))
+				candlestic.label="'Buy'"
 				self.trades.append(BotTrade(self.currentTime,self.currentPrice))
 				self.numOfTrades+=1
 				
 
 		for trade in openTrades:
-			if (self.currentPrice> self.indicators.movingAverage(self.prices,15,self.currentPrice)):
-				self.output.log("Trade Closed. Currentprice: "+str(self.currentPrice)+", MovAverage: "+str(self.indicators.movingAverage(self.prices,self.vars.movingAvPeriod,self.currentPrice)))
+			if self.indicators.movingAverage(self.prices,self.vars.movingAvPeriod2,self.currentPrice) > self.indicators.movingAverage(self.prices,self.vars.movingAvPeriod,self.currentPrice):
+				#self.output.log("Trade Closed. Currentprice: "+str(self.currentPrice)+", MovAverage: "+str(self.indicators.movingAverage(self.prices,self.vars.movingAvPeriod,self.currentPrice)))
+				candlestic.label="'Sell'"
 				trade.close(self.currentPrice, self.currentTime)
 
 	
-	# def updateOpenTrades(self):
-		# for trade in self.trades:
-			# if (trade.status == "OPEN"):
-				# trade.update(self.currentPrice, self.currentTime)
+	def updateOpenTrades(self, candlestic):
+		status=""
+		for trade in self.trades:
+			if (trade.status == "OPEN"):
+				status+=trade.update(self.currentPrice, self.currentTime) #returns if state is open or close
+				if status=="CLOSED":
+					candlestic.label="'StopLoss'"
+				
 
 	def showPositions(self):
 		for trade in self.trades:
