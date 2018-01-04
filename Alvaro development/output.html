@@ -1,15 +1,17 @@
 <html><head><script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-		<script type="text/javascript">google.charts.load('current', {'packages':['corechart']});
-		google.charts.setOnLoadCallback(drawChart);
-		function drawChart() 
-		{var data = new google.visualization.DataTable();
-		data.addColumn('datetime', 'Date');
-		data.addColumn('number', 'value');
-		data.addColumn({type: 'string', role:'annotation'});
-		data.addColumn({type: 'string', role:'annotationText'});
-		data.addColumn('number', 'movingAverage');
-		data.addColumn('number', 'movingAverage2');
-		data.addRows([[new Date(2017, 12, 23, 17, 55),14624.6188977,null,null,14624.6188977,14624.6188977],
+		
+		
+			<script type="text/javascript">google.charts.load('current', {'packages':['corechart']});
+			google.charts.setOnLoadCallback(drawChart);
+			function drawChart() 
+				{var data = new google.visualization.DataTable();
+				data.addColumn('datetime', 'Date');
+				data.addColumn('number', 'value');
+				data.addColumn({type: 'string', role:'annotation'});
+				data.addColumn({type: 'string', role:'annotationText'});
+				data.addColumn('number', 'movingAverage');
+				data.addColumn('number', 'movingAverage2');
+				data.addRows([[new Date(2017, 12, 23, 17, 55),14624.6188977,null,null,14624.6188977,14624.6188977],
 [new Date(2017, 12, 23, 18, 00),14608.923323,null,null,14616.7711103,14616.7711103],
 [new Date(2017, 12, 23, 18, 05),14521.3288809,null,null,14584.9570338,14584.9570338],
 [new Date(2017, 12, 23, 18, 10),14483.2769742,null,null,14559.5370189,14559.5370189],
@@ -1091,11 +1093,18 @@
 [new Date(2017, 12, 27, 11, 50),15489.7770837,null,null,15627.3794688,15766.0261534],
 ]);
 				var options = {title: 'Price Chart',
-				hAxis: {format: 'MMM, dd, yyyy, HH:mm'},
-				explorer: {actions: ['dragToZoom', 'rightClickToReset'],axis: 'horizontal',maxZoomIn: 100.0},
-				legend: { position: 'bottom' }};
+				hAxis: 
+					{format: 'MMM, dd, yyyy, HH:mm'},
+				explorer: 
+					{actions: ['dragToZoom', 'rightClickToReset'],axis: 'horizontal',maxZoomIn: 100.0},
+				legend: 
+					{ position: 'bottom' }};
+					
+					
 				var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
 				chart.draw(data, options);
-				}</script></head>
+				}
+				
+				</script></head>
 				<body><div id="curve_chart" style="width: 100%; height: 70%"></div></body>
 				</html>
