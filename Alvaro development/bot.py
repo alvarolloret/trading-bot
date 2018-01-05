@@ -7,11 +7,11 @@ from botlog import BotLog
 from botcandlestick import BotCandlestick
 
 def main(argv):
-	
+
 	startTime = False
 	endTime = False
-	
-	
+
+
 	#-----------------------------------------------------------------#
 	#-------------------Part 0: Passing arguments---------------------#
 	#-----------------------------------------------------------------#
@@ -39,33 +39,33 @@ def main(argv):
 			startTime = arg
 		elif opt in ("-e"):
 			endTime = arg
-	#---------------END: Part 0: Passing arguments---------------------#		
-			
-			
-			
-			
-			
-			
+	#---------------END: Part 0: Passing arguments---------------------#
+
+
+
+
+
+
 	#-----------------------------------------------------------------#
 	#-------------------Part 1: Backtesting---------------------------#
 	#-----------------------------------------------------------------#
 	if (startTime):
-	
+
 		#--------------------------------------------------------------#
 		#---------Part 1.1: picking up the data from the market--------#
 		#--------------------------------------------------------------#
 		chart = BotChart("poloniex",pair, period, startTime, endTime)
-		
-		
-		
+
+
+
 		#--------------------------------------------------------------#
 		#---------Part 1.2: initialisating the bot strategy------------#
 		#--------------------------------------------------------------#
 		strategy = BotStrategy()
 
-		
-		
-		
+
+
+
 		#--------------------------------------------------------------#
 		#---------Part 1.3: Evaluating each candlestic from the chart--#
 		#--------------------------------------------------------------#
@@ -73,21 +73,22 @@ def main(argv):
 		#--------------------------------------------------------------#
 		for candlestick in chart.getPoints():
 			strategy.tick(candlestick)
-		
-		
-		
-		
-		
+
+
+
+
+
 		strategy.showMargin()
+		chart.creatChartRSI()
 		chart.createChart()
-	#---------------END: Part 1: Backtesting--------------------#	
-	
-	
-	
-	
+	#---------------END: Part 1: Backtesting--------------------#
+
+
+
+
 	else:
 		chart = BotChart("poloniex",pair, period, startTime, endTime, False)
-		
+
 		strategy = BotStrategy()
 
 		candlesticks = []
@@ -104,7 +105,7 @@ def main(argv):
 				candlesticks.append(developingCandlestick)
 				strategy.tick(developingCandlestick)
 				developingCandlestick = BotCandlestick()
-		
+
 			time.sleep(int(30))
 
 if __name__ == "__main__":

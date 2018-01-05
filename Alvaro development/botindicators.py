@@ -31,7 +31,7 @@ class BotIndicators(object):
 	def MACD(self, prices, nslow=26, nfast=12):
 		emaslow = self.EMA(prices, nslow)
 		emafast = self.EMA(prices, nfast)
-		return emaslow, emafast, emafast - emaslow		
+		return emaslow, emafast, emafast - emaslow
 
 	def RSI (self, prices):
 		period=float(self.vars.RSIPeriod)
@@ -42,7 +42,7 @@ class BotIndicators(object):
 		rs = up/down
 		rsi = numpy.zeros_like(prices)
 		rsi[:int(period)] = 100. - 100./(1. + rs)
- 
+
 		for i in range(int(period), len(prices)):
  			delta = deltas[i - 1]  # cause the diff is 1 shorter
   			if delta > 0:
@@ -51,15 +51,12 @@ class BotIndicators(object):
  			else:
  				upval = 0.
  				downval = -delta
- 
+
  			up = (up*(period - 1) + upval)/period
  			down = (down*(period - 1) + downval)/period
   			rs = up/down
  			rsi[i] = 100. - 100./(1. + rs)
-		print rsi
   		if len(prices) > period:
  			return rsi[-1]
  		else:
  			return 50 # output a neutral amount until enough prices in list to calculate RSI
-
-		
