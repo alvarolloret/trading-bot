@@ -25,6 +25,17 @@ class BotStrategy(object):
 		self.indicators = BotIndicators()
 		self.absMargin = 0
 		self.relMargin = 0
+
+		#these are the values of the indicators qat each endTime
+		self.SMA1=0
+		self.SMA2=0
+		self.EMA1=0
+		self.EMA2=0
+		self.RSI=0
+		self.BollUp=0
+		self.BollDown=0
+
+
 	#--------------------------------------------------------------#
 	#---END:--Part 1.2: initialisating the bot strategy------------#
 	#--------------------------------------------------------------#
@@ -58,6 +69,13 @@ class BotStrategy(object):
 
 	def evaluatePositions(self,candlestic):
 		openTrades = []
+		self.SMA1=self.indicators.movingAverage(self.prices,self.vars.movingAvPeriod,self.currentPrice)
+		self.SMA2=self.indicators.movingAverage(self.prices,self.vars.movingAvPeriod2,self.currentPrice)
+		self.EMA1=self.indicators.EMA(self.prices,self.vars.movingAvPeriod,self.currentPrice)
+		self.EMA2=self.indicators.EMA(self.prices,self.vars.movingAvPeriod2,self.currentPrice)
+		self.RSI=self.indicators.RSI(self.prices)
+		self.BollUp=self.indicators.BollUp(self.prices,self.vars.BollPeriod,self.currentPrice)
+		self.BollDown=self.indicators.BollDown(self.prices,self.vars.BollPeriod,self.currentPrice)
 		for trade in self.trades:
 			if (trade.status == "OPEN"):
 				openTrades.append(trade)
@@ -68,12 +86,7 @@ class BotStrategy(object):
 			#--------------------------------------------------------------#
 			#------Part 1.3.A: Adding a trade if the conditions are met----#
 			#--------------------------------------------------------------#
-			SMA1=self.indicators.movingAverage(self.prices,self.vars.movingAvPeriod,self.currentPrice)
-			SMA2=self.indicators.movingAverage(self.prices,self.vars.movingAvPeriod2,self.currentPrice)
-			EMA1=self.indicators.EMA(self.prices,self.vars.movingAvPeriod,self.currentPrice)
-			EMA2=self.indicators.EMA(self.prices,self.vars.movingAvPeriod2,self.currentPrice)
-			RSI=self.indicators.RSI(self.prices)
-			if SMA2 < SMA1 and RSI>65:
+			if self.strategy2(True):
 				#self.output.log("Trade Opened. Currentprice: "+str(self.currentPrice)+", MovAverage: "+str(self.indicators.movingAverage(self.prices,self.vars.movingAvPeriod,self.currentPrice)))
 				candlestic.label="'Buy'"
 				self.trades.append(BotTrade(self.currentTime,self.currentPrice))
@@ -81,12 +94,7 @@ class BotStrategy(object):
 
 
 		for trade in openTrades:
-			SMA1=self.indicators.movingAverage(self.prices,self.vars.movingAvPeriod,self.currentPrice)
-			SMA2=self.indicators.movingAverage(self.prices,self.vars.movingAvPeriod2,self.currentPrice)
-			EMA1=self.indicators.EMA(self.prices,self.vars.movingAvPeriod,self.currentPrice)
-			EMA2=self.indicators.EMA(self.prices,self.vars.movingAvPeriod2,self.currentPrice)
-			RSI=self.indicators.RSI(self.prices)
-			if SMA2 > SMA1 and RSI<35:
+			if self.strategy2(False):
 				#self.output.log("Trade Closed. Currentprice: "+str(self.currentPrice)+", MovAverage: "+str(self.indicators.movingAverage(self.prices,self.vars.movingAvPeriod,self.currentPrice)))
 				candlestic.label="'Sell'"
 				trade.close(self.currentPrice, self.currentTime)
@@ -135,3 +143,16 @@ class BotStrategy(object):
 
 	def showTrades(self):
 		return self.trades
+
+
+	def strategy1(self, buyTrueSellFalse):
+		if buyTrueSellFalse:
+			return self.SMA2 < self.SMA1 and self.RSI>70
+		else:
+			return self.SMA2 > self.SMA1 and self.RSI<30
+
+	def strategy2(self, buyTrueSellFalse):
+		if buyTrueSellFalse:
+			return self.currentPrice < self.BollDown #and self.RSI>70
+		else:
+			return self.currentPrice > self.BollUp #and self.RSI<30

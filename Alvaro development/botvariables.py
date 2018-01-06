@@ -9,9 +9,13 @@ class botVariables(object):
 		self.movingAvPeriod2 = 20
 		self.RSIPeriod = 14
 
-		self.initialInvestment = 100 #in euros
 
-		self.stopLoss=500 #in the pair, for examle BTC_USD
+		self.BollNumOfStd=1.5
+		self.BollPeriod=12
+
+		self.initialInvestment = 50 #in euros
+
+		self.stopLoss=300 #in the pair, for examle BTC_USD
 
 		self.makeFee=0.0005 #0.1% of the buying fees
 		self.takeFee=0.0005 #0.1% of the selling fees

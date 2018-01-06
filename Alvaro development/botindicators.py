@@ -60,3 +60,19 @@ class BotIndicators(object):
  			return rsi[-1]
  		else:
  			return 50 # output a neutral amount until enough prices in list to calculate RSI
+
+	def BollUp(self, dataPoints, period,currentPrice):
+		if (len(dataPoints) > 1):
+			movAv=sum(dataPoints[-period:]) / float(len(dataPoints[-period:]))
+			strandarDeviation=numpy.std(dataPoints[-period:])
+			return movAv+strandarDeviation*self.vars.BollNumOfStd
+		else:
+			return currentPrice
+
+	def BollDown(self, dataPoints, period,currentPrice):
+		if (len(dataPoints) > 1):
+			movAv=sum(dataPoints[-period:]) / float(len(dataPoints[-period:]))
+			strandarDeviation=numpy.std(dataPoints[-period:])
+			return movAv-strandarDeviation*self.vars.BollNumOfStd
+		else:
+			return currentPrice

@@ -63,8 +63,11 @@ class BotHTML(object):
 				chartArea: { width:'90%',height:'90%'},
 				hAxis:
 					{format: 'MMM, dd, yyyy, HH:mm'},
-				explorer:
-					{actions: ['dragToZoom', 'rightClickToReset'],axis: 'horizontal',maxZoomIn: 100.0},
+					explorer: {
+	        axis: 'horizontal',
+	        keepInBounds: true,
+	        maxZoomIn: 10.0
+				},
 				legend:
 					{ position: 'bottom' },
 			  crosshair: {
@@ -86,8 +89,6 @@ class BotHTML(object):
             }},
 				hAxis:
 					{format: 'MMM, dd, yyyy, HH:mm'},
-				explorer:
-					{actions: ['dragToZoom', 'rightClickToReset'],axis: 'horizontal',maxZoomIn: 100.0},
 				legend:
 					{ position: 'bottom' },
 			  crosshair: {

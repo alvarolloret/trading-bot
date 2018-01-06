@@ -100,7 +100,6 @@ class BotChart(object):
 		historicalData=self.data
 		dataPoints = []
 		priceData=[]
-		movingAverage=0
 		label='null'
 		output = open("output.html",'w')
 		output.truncate()
@@ -115,6 +114,7 @@ class BotChart(object):
 				priceData.append(lastPairPrice)
 				movingAverage=self.indicators.movingAverage(priceData,self.vars.movingAvPeriod,lastPairPrice)
 				movingAverage2=self.indicators.movingAverage(priceData,self.vars.movingAvPeriod2,lastPairPrice)
+
 				label=nextDataPoint.label
 				dataDate = datetime.datetime.fromtimestamp(int(nextDataPoint.date)).strftime('%Y-%m-%d %H:%M:%S')
 				#adding the trades on the label
@@ -169,8 +169,8 @@ class BotChart(object):
 				#https://stackoverflow.com/a/4426727/5176549
 				lastPairPrice = nextDataPoint.priceAverage
 				priceData.append(lastPairPrice)
-				movingAverage=self.indicators.movingAverage(priceData,self.vars.movingAvPeriod,lastPairPrice)
-				movingAverage2=self.indicators.movingAverage(priceData,self.vars.movingAvPeriod2,lastPairPrice)
+				BollUp=self.indicators.BollUp(priceData,self.vars.movingAvPeriod,lastPairPrice)
+				BollDown=self.indicators.BollDown(priceData,self.vars.movingAvPeriod2,lastPairPrice)
 				rsiData=self.indicators.RSI(priceData)
 				label=nextDataPoint.label
 				dataDate = datetime.datetime.fromtimestamp(int(nextDataPoint.date)).strftime('%Y-%m-%d %H:%M:%S')
@@ -181,7 +181,7 @@ class BotChart(object):
 			elif(self.startTime and not historicalData):
 				output.write(self.botHTML.chart11)
 				for point in dataPoints:
-					output.write("["+self.stringToDate(point['date'])+","+point['price']+","+point['label']+","+point['desc']+","+point['movAv1']+","+point['movAv2'])
+					output.write("["+self.stringToDate(point['date'])+","+point['price']+","+point['label']+","+point['desc']+","+point['BollUp']+","+point['BollDown'])
 					output.write("],\n")
 				output.write(self.botHTML.chart12)
 				output.write(self.botHTML.chart21)
@@ -202,8 +202,9 @@ class BotChart(object):
 			dataPoints.append({
 			'date':dataDate,
 			'price': str(lastPairPrice),
-			'movAv1': str(movingAverage),
-			'movAv2': str(movingAverage2),
+			'BollUp': str(BollUp),
+			'BollDown': str(BollDown),
+
 			'rsi': str(rsiData),
 			'label': label,
 			'desc': 'null'})
