@@ -1,12 +1,11 @@
 import sys, getopt
-from datetime import datetime
-import time
-
+import datetime
+from time import mktime as mktime
 class botVariables(object):
 	def __init__(self):
 		#for backtesting you need a start and endtime
-		self.self.startTime=(2017, 1, 1, 0, 0)
-		self.endTime=(2017, 1, 4, 0, 0)
+		self.startTime=self.unixtime((2018, 1, 5, 0, 0))
+		self.endTime=self.unixtime((2018, 1, 10, 0, 0))
 
 		#pair and period for trading
 		self.pair="USDT_BTC"
@@ -30,12 +29,12 @@ class botVariables(object):
 
 		#api keys allowing realtime trading
 		self.api_key_poloniex='RZPH057A-1L01XZUI-TL2ZCFLP-0QK92K9J'
-		self.api_secret='f50a8cd597bca93d33e997603b754277ac7e7e98e4ed4da37470f7d184639af089278633bbe9aac3e54da0042673823fcd3d8a5c34112396b4a158a9203ab698'
+		self.api_secret_poloniex='f50a8cd597bca93d33e997603b754277ac7e7e98e4ed4da37470f7d184639af089278633bbe9aac3e54da0042673823fcd3d8a5c34112396b4a158a9203ab698'
 
 
 
 	def unixtime(self, time):
-		#the time must be in the following form:  startTime=(2017, 1, 1, 0, 0)
-		dt = datetime.datetime(time)
-		return int(time.mktime(dt.timetuple())
-		#Example of Unix Timestamp:  1456442580
+		# the time must be in the following form:  startTime=(2017, 1, 1, 0, 0)
+		dt = datetime.datetime(time[0], time[1], time[2], time[3], time[4])
+		# Example of Unix Timestamp:  1456442580
+		return int(mktime(dt.timetuple()))

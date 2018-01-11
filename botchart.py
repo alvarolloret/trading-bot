@@ -22,9 +22,9 @@ class BotChart(object):
 	def __init__(self, exchange, pair, period, startTime, endTime, backtest=True):
 		self.botHTML=BotHTML()
 		self.vars=botVariables()
-		self.api_key=self.vars.showApiKey()
-		self.api_secret=self.vars.showApiSecret()
-		self.avPeriod=self.vars.showMovAvPeriod()
+		self.api_key=self.vars.api_key_poloniex
+		self.api_secret=self.vars.api_secret_poloniex
+		self.avPeriod=self.vars.movingAvPeriod
 		self.indicators = BotIndicators()
 		self.pair = pair
 		self.period = period
@@ -169,8 +169,8 @@ class BotChart(object):
 				#https://stackoverflow.com/a/4426727/5176549
 				lastPairPrice = nextDataPoint.priceAverage
 				priceData.append(lastPairPrice)
-				BollUp=self.indicators.BollUp(priceData,self.vars.movingAvPeriod,lastPairPrice)
-				BollDown=self.indicators.BollDown(priceData,self.vars.movingAvPeriod2,lastPairPrice)
+				BollUp=self.indicators.BollUp(priceData,self.vars.BollPeriod,lastPairPrice)
+				BollDown=self.indicators.BollDown(priceData,self.vars.BollPeriod,lastPairPrice)
 				rsiData=self.indicators.RSI(priceData)
 				label=nextDataPoint.label
 				dataDate = datetime.datetime.fromtimestamp(int(nextDataPoint.date)).strftime('%Y-%m-%d %H:%M:%S')

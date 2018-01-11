@@ -10,9 +10,9 @@ class BotStrategy(object):
 	#--------------------------------------------------------------#
 	def __init__(self):
 		self.vars=botVariables()
-		self.investement=botVariables().showInvestment()
-		self.makeFee=botVariables().showMakeFee()
-		self.takeFee=botVariables().showTakeFee()
+		self.investement=self.vars.initialInvestment
+		self.makeFee=self.vars.makeFee
+		self.takeFee=self.vars.takeFee
 		self.output = BotLog()
 		self.prices = []
 		self.closes = [] # Needed for Momentum Indicator
@@ -127,7 +127,7 @@ class BotStrategy(object):
 				tradeStatus = tradeStatus+str(trade.exitPrice - trade.entryPrice)+"\033[0m" + " Inves: "
 
 
-				if (self.investement > botVariables().showInvestment()):
+				if (self.investement > botVariables().initialInvestment):
 					tradeStatus = tradeStatus + "\033[92m"
 				else:
 					tradeStatus = tradeStatus + "\033[91m"
@@ -153,6 +153,6 @@ class BotStrategy(object):
 
 	def strategy2(self, buyTrueSellFalse):
 		if buyTrueSellFalse:
-			return self.currentPrice < self.BollDown #and self.RSI>70
+			return self.currentPrice < self.BollDown and self.RSI<40
 		else:
-			return self.currentPrice > self.BollUp #and self.RSI<30
+			return self.currentPrice > self.BollUp and self.RSI>55

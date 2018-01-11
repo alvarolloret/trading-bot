@@ -9,37 +9,38 @@ from botcandlestick import BotCandlestick
 
 def main(argv):
 	variables=botVariables()
-	startTime = False
+	startTime = True
 	endTime = False
 
 
 	#-----------------------------------------------------------------#
 	#-------------------Part 0: Passing arguments---------------------#
 	#-----------------------------------------------------------------#
-	try:
-		opts, args = getopt.getopt(argv,"hp:c:n:s:e:",["period=","currency=","points="])
-	except getopt.GetoptError:
-		print 'trading-bot.py -p <period length> -c <currency pair> -n <period of moving average>'
-		sys.exit(2)
-
-	for opt, arg in opts:
-		if opt == '-h':
-			print 'trading-bot.py -p <period length> -c <currency pair> -n <period of moving average>'
-			sys.exit()
-		elif opt in ("-p", "--period"):
-			if (int(arg) in [300,900,1800,7200,14400,86400]):
-				period = arg
-			else:
-				print 'Poloniex requires periods in 300,900,1800,7200,14400, or 86400 second increments'
-				sys.exit(2)
-		elif opt in ("-c", "--currency"):
-			pair = arg
-		elif opt in ("-n", "--points"):
-			lengthOfMA = int(arg)
-		elif opt in ("-s"):
-			startTime = arg
-		elif opt in ("-e"):
-			endTime = arg
+	# try:
+	# 	opts, args = getopt.getopt(argv,"hp:c:n:s:e:",["period=","currency=","points="])
+	# except getopt.GetoptError:
+	# 	print 'trading-bot.py -p <period length> -c <currency pair> -n <period of moving average>'
+	# 	sys.exit(2)
+    #
+	# for opt, arg in opts:
+	# 	if opt == '-h':
+	# 		print 'trading-bot.py -p <period length> -c <currency pair> -n <period of moving average>'
+	# 		sys.exit()
+	# 	elif opt in ("-p", "--period"):
+	# 		if (int(arg) in [300,900,1800,7200,14400,86400]):
+	# 			period = arg
+	# 		else:
+	# 			print 'Poloniex requires periods in 300,900,1800,7200,14400, or 86400 second increments'
+	# 			sys.exit(2)
+	# 	elif opt in ("-c", "--currency"):
+	# 		pair = arg
+	# 	elif opt in ("-n", "--points"):
+	# 		lengthOfMA = int(arg)
+	# 	elif opt in ("-s"):
+	# 		startTime = arg
+	# 	elif opt in ("-e"):
+	# 		endTime = arg
+    #
 	#---------------END: Part 0: Passing arguments---------------------#
 
 
@@ -55,7 +56,9 @@ def main(argv):
 		#--------------------------------------------------------------#
 		#---------Part 1.1: picking up the data from the market--------#
 		#--------------------------------------------------------------#
-		chart = BotChart("poloniex",pair, period, startTime, endTime)
+		print "PAIR: "+str(variables.pair) + ", period: " + str(variables.period)
+
+		chart = BotChart("poloniex",variables.pair, variables.period, variables.startTime, variables.endTime)
 
 
 
@@ -80,8 +83,8 @@ def main(argv):
 
 
 		strategy.showMargin()
-		#chart.creatChartRSI()
-		chart.createChart()
+		chart.creatChartRSI()
+		# chart.createChart()
 	#---------------END: Part 1: Backtesting--------------------#
 
 
