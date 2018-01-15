@@ -83,8 +83,8 @@ def main(argv):
 
 
 		strategy.showMargin()
-		chart.creatChartRSI()
-		# chart.createChart()
+		#chart.creatChartRSI()
+		chart.createChart()
 	#---------------END: Part 1: Backtesting--------------------#
 
 

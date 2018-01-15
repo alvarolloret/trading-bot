@@ -86,7 +86,7 @@ class BotStrategy(object):
 			#--------------------------------------------------------------#
 			#------Part 1.3.A: Adding a trade if the conditions are met----#
 			#--------------------------------------------------------------#
-			if self.strategy2(True):
+			if self.strategy1(True):
 				#self.output.log("Trade Opened. Currentprice: "+str(self.currentPrice)+", MovAverage: "+str(self.indicators.movingAverage(self.prices,self.vars.movingAvPeriod,self.currentPrice)))
 				candlestic.label="'Buy'"
 				self.trades.append(BotTrade(self.currentTime,self.currentPrice))
@@ -94,7 +94,7 @@ class BotStrategy(object):
 
 
 		for trade in openTrades:
-			if self.strategy2(False):
+			if self.strategy1(False):
 				#self.output.log("Trade Closed. Currentprice: "+str(self.currentPrice)+", MovAverage: "+str(self.indicators.movingAverage(self.prices,self.vars.movingAvPeriod,self.currentPrice)))
 				candlestic.label="'Sell'"
 				trade.close(self.currentPrice, self.currentTime)

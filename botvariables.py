@@ -4,19 +4,19 @@ from time import mktime as mktime
 class botVariables(object):
 	def __init__(self):
 		#for backtesting you need a start and endtime
-		self.startTime=self.unixtime((2018, 1, 5, 0, 0))
-		self.endTime=self.unixtime((2018, 1, 10, 0, 0))
+		self.startTime=self.unixtime((2017, 1, 5, 0, 0))
+		self.endTime=self.unixtime((2017, 1, 10, 0, 0))
 
 		#pair and period for trading
 		self.pair="USDT_BTC"
 		self.period=300
 
 		#variables to form a stategy
-		self.movingAvPeriod = 5
-		self.movingAvPeriod2 = 20
+		self.movingAvPeriod = 15
+		self.movingAvPeriod2 = 50
 		self.RSIPeriod = 14
 
-		self.BollNumOfStd=1.5
+		self.BollNumOfStd=2
 		self.BollPeriod=12
 
 		self.initialInvestment = 100 #in euros
@@ -28,8 +28,8 @@ class botVariables(object):
 		self.takeFee=0.0005 #0.1% of the selling fees
 
 		#api keys allowing realtime trading
-		self.api_key_poloniex='RZPH057A-1L01XZUI-TL2ZCFLP-0QK92K9J'
-		self.api_secret_poloniex='f50a8cd597bca93d33e997603b754277ac7e7e98e4ed4da37470f7d184639af089278633bbe9aac3e54da0042673823fcd3d8a5c34112396b4a158a9203ab698'
+		self.api_key_poloniex='-'
+		self.api_secret_poloniex='-'
 
 
 
