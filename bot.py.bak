@@ -56,7 +56,7 @@ def main(argv):
 		#--------------------------------------------------------------#
 		#---------Part 1.1: picking up the data from the market--------#
 		#--------------------------------------------------------------#
-		print(("PAIR: "+str(variables.pair) + ", period: " + str(variables.period)))
+		print "PAIR: "+str(variables.pair) + ", period: " + str(variables.period)
 
 		chart = BotChart("poloniex",variables.pair, variables.period, variables.startTime, variables.endTime)
 
@@ -91,7 +91,7 @@ def main(argv):
 
 
 	else:
-		print("TODO: Live trading")
+		print "TODO: Live trading"
 		# chart = BotChart("poloniex",pair, period, startTime, endTime, False)
         #
 		# strategy = BotStrategy()

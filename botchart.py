@@ -1,5 +1,5 @@
-from poloniex import poloniex
-import urllib, json
+import poloniex
+import urllib.request, urllib.parse, urllib.error, json
 import pprint
 import datetime
 from botcandlestick import BotCandlestick
@@ -13,7 +13,7 @@ class BotChart(object):
 
 
 
-	#------------------------------------------------------------------#
+	#------------------------------------------------------------	------#
 	#---------Part 1.1: Fetch the data from market---------------------#
 	#------------------------------------------------------------------#
 	#---Output: self.data=[Botcandlstck1 ,Botcandlestick2, ..3, ..4]---#
@@ -35,13 +35,13 @@ class BotChart(object):
 		self.poloData=[]
 		self.trades=[]
 		if (exchange == "poloniex"):
-			print 'Ecxhange with Poloniex'
-			self.conn = poloniex(self.api_key,self.api_secret)
+			print('Ecxhange with Poloniex')
+			self.conn = poloniex.Poloniex(self.api_key,self.api_secret)
 			if backtest:
-				print "Checking the data from "+datetime.datetime.fromtimestamp(int(startTime)).strftime('%Y-%m-%d %H:%M:%S') + " to " + datetime.datetime.fromtimestamp(int(endTime)).strftime('%Y-%m-%d %H:%M:%S')
+				print("Checking the data from "+datetime.datetime.fromtimestamp(int(startTime)).strftime('%Y-%m-%d %H:%M:%S') + " to " + datetime.datetime.fromtimestamp(int(endTime)).strftime('%Y-%m-%d %H:%M:%S'))
 
 
-				self.poloData = self.conn.api_query("returnChartData",{"currencyPair":self.pair,"start":self.startTime,"end":self.endTime,"period":self.period})
+				self.poloData = self.conn.returnChartData(self.pair,self.period,self.startTime,self.endTime)
 
 
 				#A:poloData is an list (checked with the funtion type(), where each item of the list contains 6 values of the period
@@ -54,7 +54,7 @@ class BotChart(object):
 		if (exchange == "bittrex"):
 			if backtest:
 				url = "https://bittrex.com/Api/v2.0/pub/market/GetTicks?marketName="+self.pair+"&tickInterval="+self.period+"&_="+str(self.startTime)
-				response = urllib.urlopen(url)
+				response = urllib.request.urlopen(url)
 				rawdata = json.loads(response.read())
 
 				self.data = rawdata["result"]

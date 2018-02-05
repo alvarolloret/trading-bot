@@ -3,4 +3,4 @@ class BotLog(object):
 		pass
 
 	def log(self, message):
-		print(message)
+		print message
