@@ -1,3 +1,4 @@
+#from exchange import poloniex
 import poloniex
 import urllib.request, urllib.parse, urllib.error, json
 import pprint
@@ -9,7 +10,6 @@ from bottrade import BotTrade
 from bothtml import BotHTML
 
 class BotChart(object):
-
 
 
 
@@ -111,17 +111,16 @@ class BotChart(object):
 			if (self.startTime and historicalData):
 				nextDataPoint = historicalData.pop(0)  #https://stackoverflow.com/a/4426727/5176549
 				lastPairPrice = nextDataPoint.priceAverage
-				priceData.append(lastPairPrice)
+				priceData.append(float(lastPairPrice))
 				movingAverage=self.indicators.movingAverage(priceData,self.vars.movingAvPeriod,lastPairPrice)
 				movingAverage2=self.indicators.movingAverage(priceData,self.vars.movingAvPeriod2,lastPairPrice)
-
 				label=nextDataPoint.label
 				dataDate = datetime.datetime.fromtimestamp(int(nextDataPoint.date)).strftime('%Y-%m-%d %H:%M:%S')
 				#adding the trades on the label
 
-
 			#step 2: once the iteration is finished, adding all the info in the chart
 			elif(self.startTime and not historicalData):
+				print ("Finished")
 				for point in dataPoints:
 					output.write("["+self.stringToDate(point['date'])+","+point['price']+","+point['label']+","+point['desc']+","+point['movAv1']+","+point['movAv2'])
 					output.write("],\n")
@@ -168,7 +167,7 @@ class BotChart(object):
 				nextDataPoint = historicalData.pop(0)
 				#https://stackoverflow.com/a/4426727/5176549
 				lastPairPrice = nextDataPoint.priceAverage
-				priceData.append(lastPairPrice)
+				priceData.append(float(lastPairPrice))
 				BollUp=self.indicators.BollUp(priceData,self.vars.BollPeriod,lastPairPrice)
 				BollDown=self.indicators.BollDown(priceData,self.vars.BollPeriod,lastPairPrice)
 				rsiData=self.indicators.RSI(priceData)

@@ -4,6 +4,8 @@ from bottrade import BotTrade
 from botvariables import botVariables
 import datetime
 
+
+
 class BotStrategy(object):
     #--------------------------------------------------------------#
     #---------Part 1.2: initialisating the bot strategy------------#
@@ -114,17 +116,18 @@ class BotStrategy(object):
             trade.showTrade()
 
     def showMargin(self):
+
         tradeStatus="Stat"
         for trade in self.trades:
             if (trade.status == "CLOSED"):
-                tradeStatus=datetime.datetime.fromtimestamp(trade.exitTime).strftime('%Y-%m-%d %H:%M:%S')+" "+ str(trade.status) + " Entry: "+str(trade.entryPrice)+" Exit: "+str(trade.exitPrice)
+                tradeStatus=datetime.datetime.fromtimestamp(trade.exitTime).strftime('%Y-%m-%d %H:%M:%S')+" "+ str(trade.status) + " Entry: "+str(round(trade.entryPrice, 2))+" Exit: "+str(round(trade.exitPrice, 2))
                 self.makeInvesment(trade) #considering the trade as an indicator
                 tradeStatus = tradeStatus + " Profit: "
                 if (trade.exitPrice > trade.entryPrice):
                     tradeStatus = tradeStatus + "\033[92m"
                 else:
                     tradeStatus = tradeStatus + "\033[91m"
-                tradeStatus = tradeStatus+str(trade.exitPrice - trade.entryPrice)+"\033[0m" + " Inves: "
+                tradeStatus = tradeStatus+str(round(trade.exitPrice - trade.entryPrice, 2))+"\033[0m" + " Inves: "
 
 
                 if (self.investement > botVariables().initialInvestment):
@@ -132,7 +135,7 @@ class BotStrategy(object):
                 else:
                     tradeStatus = tradeStatus + "\033[91m"
 
-                tradeStatus= tradeStatus+ str(self.investement)+"\033[0m"
+                tradeStatus= tradeStatus+ str(round(self.investement,2))+"\033[0m"
                 self.output.log(tradeStatus)
 
         self.output.log(tradeStatus)

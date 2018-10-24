@@ -11,7 +11,7 @@ class BotIndicators(object):
         if (len(dataPoints) > 1):
             return sum(dataPoints[-period:]) / float(len(dataPoints[-period:]))
         else:
-            return currentPrice
+            return float(currentPrice)
 
     def momentum(self, dataPoints, period=14):
         if (len(dataPoints) > period - 1):

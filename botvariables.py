@@ -4,12 +4,12 @@ from time import mktime as mktime
 class botVariables(object):
 	def __init__(self):
 		#for backtesting you need a start and endtime
-		self.startTime=self.unixtime((2017, 1, 5, 0, 0))
-		self.endTime=self.unixtime((2017, 1, 10, 0, 0))
+		self.startTime=self.unixtime((2018, 2, 5, 0, 0))
+		self.endTime=self.unixtime((2018, 10, 6, 0, 0))
 
 		#pair and period for trading
-		self.pair="USDT_BTC"
-		self.period=300
+		self.pair="USDT_ETH"
+		self.period=14400  #In seconds, valid values are 300, 900, 1800, 7200, 14400, and 86400
 
 		#variables to form a stategy
 		self.movingAvPeriod = 15

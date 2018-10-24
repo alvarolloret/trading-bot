@@ -7,7 +7,10 @@ from botstrategy import BotStrategy
 from botlog import BotLog
 from botcandlestick import BotCandlestick
 
+from colorama import init  #THis is only for color printing
+
 def main(argv):
+	init()  #THis is only for color printing
 	variables=botVariables()
 	startTime = True
 	endTime = False
@@ -59,7 +62,6 @@ def main(argv):
 		print(("PAIR: "+str(variables.pair) + ", period: " + str(variables.period)))
 
 		chart = BotChart("poloniex",variables.pair, variables.period, variables.startTime, variables.endTime)
-
 
 
 		#--------------------------------------------------------------#
