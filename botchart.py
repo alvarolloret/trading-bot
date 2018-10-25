@@ -8,6 +8,7 @@ from botvariables import botVariables
 from botindicators import BotIndicators
 from bottrade import BotTrade
 from bothtml import BotHTML
+from binance.client import Client
 
 class BotChart(object):
 
@@ -50,14 +51,38 @@ class BotChart(object):
 					if (datum['open'] and datum['close'] and datum['high'] and datum['low']):
 						#putting all this data to the BotCandlestick object
 						self.data.append(BotCandlestick(self.period,datum['open'],datum['close'],datum['high'],datum['low'],datum['weightedAverage'], datum['date']))
-
-		if (exchange == "bittrex"):
+				d = self.data[0].__dict__
+				print (d)
+		if (exchange == "binance"):
+			# Remember to install binance python script with --> pip install python-binance
+			print('Ecxhange with Binance')
 			if backtest:
-				url = "https://bittrex.com/Api/v2.0/pub/market/GetTicks?marketName="+self.pair+"&tickInterval="+self.period+"&_="+str(self.startTime)
-				response = urllib.request.urlopen(url)
-				rawdata = json.loads(response.read())
+				# create the Binance client, no need for api key
+				client = Client("", "")
+				klines = client.get_historical_klines(self.vars.pairBinance, Client.KLINE_INTERVAL_4HOUR, self.vars.startTimeBinance, self.vars.endTimeBinance)
+				for kline in klines:
+					self.data.append(BotCandlestick(self.period,kline[1],kline[2],kline[3],kline[4],str((float(kline[4])-float(kline[3]))/2), kline[0]))
 
-				self.data = rawdata["result"]
+				"""Get Historical Klines from Binance
+			    [
+				  [
+				    1499040000000,      // Open time 1517803200000
+				    "0.01634790",       // Open
+				    "0.80000000",       // High
+				    "0.01575800",       // Low
+				    "0.01577100",       // Close
+				    "148976.11427815",  // Volume
+				    1499644799999,      // Close time
+				    "2434.19055334",    // Quote asset volume
+				    308,                // Number of trades
+				    "1756.87402397",    // Taker buy base asset volume
+				    "28.46694368",      // Taker buy quote asset volume
+				    "17928899.62484339" // Ignore.
+				  ]
+				]
+			    """
+				d = self.data[0].__dict__
+				print (d)
 	#------------------------------------------------------------------#
 	#---------END--Part 1.1: initialisating the bot strategy-----------#
 	#------------------------------------------------------------------#

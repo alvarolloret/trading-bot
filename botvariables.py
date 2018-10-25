@@ -3,13 +3,21 @@ import datetime
 from time import mktime as mktime
 class botVariables(object):
 	def __init__(self):
+		#self.market
+		self.market="binance" 	#options: binance, poloniex
+
 		#for backtesting you need a start and endtime
 		self.startTime=self.unixtime((2018, 2, 5, 0, 0))
-		self.endTime=self.unixtime((2018, 10, 6, 0, 0))
+		self.startTimeBinance="5 Fev, 2018"
+		self.endTime=self.unixtime((2018, 4, 6, 0, 0))
+		self.endTimeBinance="5 Apr, 2018"
 
 		#pair and period for trading
-		self.pair="USDT_ETH"
-		self.period=14400  #In seconds, valid values are 300, 900, 1800, 7200, 14400, and 86400
+		self.pair="USDT_ETH"     	#For poloniex
+		self.pairBinance='ETHUSDT'	#For binance
+		self.period=14400  			#Poloniex: In seconds, valid values are 300, 900, 1800, 7200 (2h), 14400 (4h), and 86400 (1d)
+		self.periodBinance="KLINE_INTERVAL_4HOUR" 	#For binance: KLINE_INTERVAL_12HOUR, 15MINUTE, 1DAY, 1HOUR, 1MINUTE, ETC, see : https://python-binance.readthedocs.io/en/latest/binance.html
+
 
 		#variables to form a stategy
 		self.movingAvPeriod = 15

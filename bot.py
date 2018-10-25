@@ -61,7 +61,7 @@ def main(argv):
 		#--------------------------------------------------------------#
 		print(("PAIR: "+str(variables.pair) + ", period: " + str(variables.period)))
 
-		chart = BotChart("poloniex",variables.pair, variables.period, variables.startTime, variables.endTime)
+		chart = BotChart(variables.market,variables.pair, variables.period, variables.startTime, variables.endTime)
 
 
 		#--------------------------------------------------------------#

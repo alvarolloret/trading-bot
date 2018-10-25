@@ -17,6 +17,10 @@ class BotCandlestick(object):
 		self.priceAverage = priceAverage
 		self.label='null'
 
+	def getCandlestick(self):
+		return [self.current, self.open, self.close, self.date , self.high, self.low, self.startTime, self.period, self.output,self.priceAverage]
+		print ("[" + self.current + ", "+ self.open+", "+ self.close + ", " + self.date + ", " + self.high + ", "+ self.low  + ", "+ self.startTime+ ", "+ self.period+ ", "+ self.output+ ", "+ self.priceAverage+ "]")
+
 	def tick(self,price,date):
 		self.current = float(price)
 		self.date = date
@@ -32,7 +36,7 @@ class BotCandlestick(object):
 		if ( time.time() >= ( self.startTime + self.period) ):
 			self.close = self.current
 			self.priceAverage = ( self.high + self.low + self.close ) / float(3)
-		
+
 		#self.output.log("Open: "+str(self.open)+" Close: "+str(self.close)+" High: "+str(self.high)+" Low: "+str(self.low)+" Current: "+str(self.current))
 
 	def isClosed(self):
@@ -40,4 +44,3 @@ class BotCandlestick(object):
 			return True
 		else:
 			return False
-
