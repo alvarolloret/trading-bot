@@ -43,7 +43,10 @@ class BotIndicators(object):
         seed = deltas[:int(period) + 1]
         up = seed[seed >= 0].sum() / period
         down = -seed[seed < 0].sum() / period
-        rs = up/down
+        if abs(down) == 0:
+            rs= 0
+        else:
+            rs = float(up)/down
         rsi = numpy.zeros_like(prices)
         rsi[:int(period)] = 100. - 100. / (1. + rs)
 
@@ -60,6 +63,7 @@ class BotIndicators(object):
              down = (down * (period - 1) + downval) / period
              rs = up / down
              rsi[i] = 100. - 100. / (1. + rs)
+
              if len(prices) > period:
                  return rsi[-1]
              else:

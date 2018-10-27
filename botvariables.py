@@ -1,16 +1,20 @@
 import sys, getopt
 import datetime
 from time import mktime as mktime
+import time
+
+# >>> s = "01/12/2011"
+# >>> time.mktime(datetime.datetime.strptime(s, "%d/%m/%Y").timetuple())
 class botVariables(object):
 	def __init__(self):
 		#self.market
 		self.market="binance" 	#options: binance, poloniex
 
 		#for backtesting you need a start and endtime
-		self.startTime=self.unixtime((2018, 2, 5, 0, 0))
-		self.startTimeBinance="5 Fev, 2018"
-		self.endTime=self.unixtime((2018, 4, 6, 0, 0))
-		self.endTimeBinance="5 Apr, 2018"
+		self.startTime=self.unixtime((2018, 2, 5, 0, 0)) #poloniex
+		self.startTimeBinance=str(mktime(time.strptime('2018-02-05 17:00:00', '%Y-%m-%d %H:%M:%S')))
+		self.endTime=self.unixtime((2018, 6, 5, 0, 0)) #poloniex
+		self.endTimeBinance=str(mktime(time.strptime('2018-06-05 17:00:00', '%Y-%m-%d %H:%M:%S')))
 
 		#pair and period for trading
 		self.pair="USDT_ETH"     	#For poloniex

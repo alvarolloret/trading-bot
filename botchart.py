@@ -51,38 +51,40 @@ class BotChart(object):
 					if (datum['open'] and datum['close'] and datum['high'] and datum['low']):
 						#putting all this data to the BotCandlestick object
 						self.data.append(BotCandlestick(self.period,datum['open'],datum['close'],datum['high'],datum['low'],datum['weightedAverage'], datum['date']))
-				d = self.data[0].__dict__
-				print (d)
+
 		if (exchange == "binance"):
 			# Remember to install binance python script with --> pip install python-binance
 			print('Ecxhange with Binance')
 			if backtest:
 				# create the Binance client, no need for api key
 				client = Client("", "")
-				klines = client.get_historical_klines(self.vars.pairBinance, Client.KLINE_INTERVAL_4HOUR, self.vars.startTimeBinance, self.vars.endTimeBinance)
+				klines = client.get_historical_klines(self.vars.pairBinance, getattr(client, self.vars.periodBinance), self.vars.startTimeBinance, self.vars.endTimeBinance)
 				for kline in klines:
-					self.data.append(BotCandlestick(self.period,kline[1],kline[2],kline[3],kline[4],str((float(kline[4])-float(kline[3]))/2), kline[0]))
+					self.data.append(BotCandlestick(self.period,kline[1],kline[4],kline[2],kline[3],str((float(kline[1])+float(kline[2])+float(kline[4])+float(kline[3]))/4), int(((kline[0])+(kline[6]))/2000))) #because in miliseconds
 
-				"""Get Historical Klines from Binance
+
+				"""
+				Get Historical Klines from Binance
 			    [
 				  [
-				    1499040000000,      // Open time 1517803200000
-				    "0.01634790",       // Open
-				    "0.80000000",       // High
-				    "0.01575800",       // Low
-				    "0.01577100",       // Close
-				    "148976.11427815",  // Volume
-				    1499644799999,      // Close time
-				    "2434.19055334",    // Quote asset volume
-				    308,                // Number of trades
-				    "1756.87402397",    // Taker buy base asset volume
-				    "28.46694368",      // Taker buy quote asset volume
+				    1499040000000,      // 0.Open time 1517803200000
+				    "0.01634790",       // 1.Open
+				    "0.80000000",       // 2.High
+				    "0.01575800",       // 3.Low
+				    "0.01577100",       // 4.Close
+				    "148976.11427815",  // 5.Volume
+				    1499644799999,      // 6.Close time
+				    "2434.19055334",    // 7.Quote asset volume
+				    308,                // 8.Number of trades
+				    "1756.87402397",    // 9.Taker buy base asset volume
+				    "28.46694368",      // 10.Taker buy quote asset volume
 				    "17928899.62484339" // Ignore.
 				  ]
 				]
 			    """
-				d = self.data[0].__dict__
-				print (d)
+		# d = self.data[0].__dict__
+		# print (d)
+
 	#------------------------------------------------------------------#
 	#---------END--Part 1.1: initialisating the bot strategy-----------#
 	#------------------------------------------------------------------#

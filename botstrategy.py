@@ -138,7 +138,7 @@ class BotStrategy(object):
                 tradeStatus= tradeStatus+ str(round(self.investement,2))+"\033[0m"
                 self.output.log(tradeStatus)
 
-        self.output.log(tradeStatus)
+        # self.output.log(tradeStatus)
 
     def makeInvesment(self, trade):
         self.investement= ((1-self.makeFee)*self.investement/trade.entryPrice)*((1-self.takeFee)*trade.exitPrice)
