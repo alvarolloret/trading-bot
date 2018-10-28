@@ -1,0 +1,13 @@
+Strategies: https://medium.com/@joeldg/lets-write-a-cryptocurrency-bot-part-2-7adf47f5a80e
+
+
+bowhead_bband_rsi: 15M
+
+if RSI > 70 and prices touches BBAND lower 			-->  long
+if RSI < 30 and prices touches BBAND top 			-->  sell
+
+
+bowhead_double_volatility: 15M
+
+if SMA5(high)>SMA20(high) and RSI > 65 				then long
+if SMA5(high)<SMA20(low) and RSI < 35 				then sell.
