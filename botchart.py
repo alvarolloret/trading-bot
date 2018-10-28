@@ -188,6 +188,7 @@ class BotChart(object):
 		#Understanding googlechart: https://developers.google.com/chart/interactive/docs/basic_load_libs
 		output.write(self.botHTML.javascript)
 
+
 		while True:
 			#step 0: iterating over data points
 			if (self.startTime and historicalData):
@@ -212,6 +213,7 @@ class BotChart(object):
 				output.write(self.botHTML.chart12)
 				output.write(self.botHTML.chart21)
 				for point in dataPoints:
+					# print (point['rsi'])
 					output.write("["+self.stringToDate(point['date'])+","+point['rsi'])
 					output.write("],\n")
 				output.write(self.botHTML.chart22)

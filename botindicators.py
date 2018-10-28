@@ -49,7 +49,6 @@ class BotIndicators(object):
             rs = float(up)/down
         rsi = numpy.zeros_like(prices)
         rsi[:int(period)] = 100. - 100. / (1. + rs)
-
         for i in range(int(period), len(prices)):
              delta = deltas[i-1]  # cause the diff is 1 shorter
              if(delta>0):
@@ -63,11 +62,13 @@ class BotIndicators(object):
              down = (down * (period - 1) + downval) / period
              rs = up / down
              rsi[i] = 100. - 100. / (1. + rs)
+        if len(prices) > period:
+            return rsi[-1]
+        else:
+            return 50 # output a neutral amount until enough prices in list to calculate RSI
 
-             if len(prices) > period:
-                 return rsi[-1]
-             else:
-                 return 50 # output a neutral amount until enough prices in list to calculate RSI
+
+
 
     def BollUp(self, dataPoints, period,currentPrice):
         if (len(dataPoints) > 1):

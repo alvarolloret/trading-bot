@@ -11,10 +11,10 @@ class botVariables(object):
 		self.market="binance" 	#options: binance, poloniex
 
 		#for backtesting you need a start and endtime
-		self.startTime=self.unixtime((2018, 2, 5, 0, 0)) #poloniex
-		self.startTimeBinance=str(mktime(time.strptime('2018-02-05 17:00:00', '%Y-%m-%d %H:%M:%S')))
-		self.endTime=self.unixtime((2018, 6, 5, 0, 0)) #poloniex
-		self.endTimeBinance=str(mktime(time.strptime('2018-06-05 17:00:00', '%Y-%m-%d %H:%M:%S')))
+		self.startTime=self.unixtime((2018, 2, 1, 0, 0)) #poloniex
+		self.startTimeBinance=str(mktime(time.strptime('2018-02-01 17:00:00', '%Y-%m-%d %H:%M:%S')))
+		self.endTime=self.unixtime((2018, 6, 1, 0, 0)) #poloniex
+		self.endTimeBinance=str(mktime(time.strptime('2018-06-01 17:00:00', '%Y-%m-%d %H:%M:%S')))
 
 		#pair and period for trading
 		self.pair="USDT_ETH"     	#For poloniex
@@ -26,7 +26,7 @@ class botVariables(object):
 		#variables to form a stategy
 		self.movingAvPeriod = 15
 		self.movingAvPeriod2 = 50
-		self.RSIPeriod = 14
+		self.RSIPeriod = 4
 
 		self.BollNumOfStd=2
 		self.BollPeriod=12
