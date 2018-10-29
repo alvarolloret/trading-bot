@@ -3,8 +3,6 @@ import datetime
 from time import mktime as mktime
 import time
 
-# >>> s = "01/12/2011"
-# >>> time.mktime(datetime.datetime.strptime(s, "%d/%m/%Y").timetuple())
 class botVariables(object):
 	def __init__(self):
 		#self.market

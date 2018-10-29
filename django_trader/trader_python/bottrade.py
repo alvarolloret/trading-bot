@@ -1,6 +1,6 @@
-from botlog import BotLog
+from trader_python.botlog import BotLog
 import datetime
-from botvariables import botVariables
+from trader_python.botvariables import botVariables
 
 class BotTrade(object):
 	def __init__(self,time,currentPrice):

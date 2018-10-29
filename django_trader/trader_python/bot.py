@@ -1,11 +1,11 @@
 import sys, getopt
 import time
 
-from botvariables import botVariables
-from botchart import BotChart
-from botstrategy import BotStrategy
-from botlog import BotLog
-from botcandlestick import BotCandlestick
+from trader_python.botvariables import botVariables
+from trader_python.botchart import BotChart
+from trader_python.botstrategy import BotStrategy
+from trader_python.botlog import BotLog
+from trader_python.botcandlestick import BotCandlestick
 
 from colorama import init  #THis is only for color printing
 

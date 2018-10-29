@@ -1,5 +1,5 @@
 import numpy
-from botvariables import botVariables
+from trader_python.botvariables import botVariables
 
 
 class BotIndicators(object):

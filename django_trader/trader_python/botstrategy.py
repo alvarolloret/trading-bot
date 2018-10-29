@@ -1,7 +1,7 @@
-from botlog import BotLog
-from botindicators import BotIndicators
-from bottrade import BotTrade
-from botvariables import botVariables
+from trader_python.botlog import BotLog
+from trader_python.botindicators import BotIndicators
+from trader_python.bottrade import BotTrade
+from trader_python.botvariables import botVariables
 import datetime
 
 

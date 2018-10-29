@@ -1,13 +1,13 @@
 #from exchange import poloniex
-import poloniex
+from trader_python import poloniex
 import urllib.request, urllib.parse, urllib.error, json
 import pprint
 import datetime
-from botcandlestick import BotCandlestick
-from botvariables import botVariables
-from botindicators import BotIndicators
-from bottrade import BotTrade
-from bothtml import BotHTML
+from trader_python.botcandlestick import BotCandlestick
+from trader_python.botvariables import botVariables
+from trader_python.botindicators import BotIndicators
+from trader_python.bottrade import BotTrade
+from trader_python.bothtml import BotHTML
 from binance.client import Client
 
 class BotChart(object):
