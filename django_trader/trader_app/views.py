@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from trader_app.models import User, CandleStick
+from datetime import datetime
 from . import forms
 
 # Importing main from python trader.
@@ -24,10 +25,20 @@ def index(request):
             # DO SOMETHING CODE
             print("VALIDATION SUCCESS!")
             print("Start: " + str(form.cleaned_data['dateStart']))
-            print("Start: " + str(form.cleaned_data['dateEnd']))
+            print("End: " + str(form.cleaned_data['dateEnd']))
+
 
             init()  # THis is only for color printing
+
+
             variables = botVariables()
+            time1=form.cleaned_data['dateStart'].strftime('%Y-%m-%d %H:%M:%S')
+            time2=form.cleaned_data['dateEnd'].strftime('%Y-%m-%d %H:%M:%S')
+            variables.modifyStartTime(time1)
+            variables.modifyEndTime(time2)
+
+
+
             startTime = True
             endTime = False
 
@@ -38,9 +49,9 @@ def index(request):
                 #--------------------------------------------------------------#
                 print(("PAIR: " + str(variables.pair) +
                        ", period: " + str(variables.period)))
-
-                chart = BotChart(variables.market, variables.pair,
-                                 variables.period, variables.startTime, variables.endTime)
+                print(("Start: " + str(variables.startTime) +
+                       ", End: " + str(variables.endTime)))
+                chart = BotChart(variables)
 
                 #--------------------------------------------------------------#
                 #---------Part 1.2: initialisating the bot strategy------------#
@@ -56,12 +67,12 @@ def index(request):
                     strategy.tick(candlestick)
 
                 strategy.showMargin()
-                chart.creatChartRSI()
-                # chart.createChart()
+                dataChart=chart.returnData()
+
             #---------------END: Part 1: Backtesting--------------------#
 
             else:
                 print("TODO: Live trading")
 
 
-    return render(request, 'trader_app/index.html', {'form': form})
+            return render(request, 'trader_app/outputResult.html', {'data': dataChart})

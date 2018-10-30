@@ -4,7 +4,6 @@ import urllib.request, urllib.parse, urllib.error, json
 import pprint
 import datetime
 from trader_python.botcandlestick import BotCandlestick
-from trader_python.botvariables import botVariables
 from trader_python.botindicators import BotIndicators
 from trader_python.bottrade import BotTrade
 from trader_python.bothtml import BotHTML
@@ -20,45 +19,45 @@ class BotChart(object):
 	#---Output: self.data=[Botcandlstck1 ,Botcandlestick2, ..3, ..4]---#
 	#------------------------------------------------------------------#
 	#------------------------------------------------------------------#
-	def __init__(self, exchange, pair, period, startTime, endTime, backtest=True):
+	def __init__(self, variables):
 		self.botHTML=BotHTML()
-		self.vars=botVariables()
+		self.vars=variables
 		self.api_key=self.vars.api_key_poloniex
 		self.api_secret=self.vars.api_secret_poloniex
 		self.avPeriod=self.vars.movingAvPeriod
 		self.indicators = BotIndicators()
-		self.pair = pair
-		self.period = period
-		self.startTime = startTime
-		self.endTime = endTime
+		self.pair = self.vars.pair
+		self.period = self.vars.period
+		self.startTime = self.vars.startTime
+		self.endTime = self.vars.endTime
 		self.data = []
 		self.prices = []
 		self.poloData=[]
 		self.trades=[]
-		if (exchange == "poloniex"):
-			print('Ecxhange with Poloniex')
-			self.conn = poloniex.Poloniex(self.api_key,self.api_secret)
-			if backtest:
-				print("Checking the data from "+datetime.datetime.fromtimestamp(int(startTime)).strftime('%Y-%m-%d %H:%M:%S') + " to " + datetime.datetime.fromtimestamp(int(endTime)).strftime('%Y-%m-%d %H:%M:%S'))
+		# if (self.vars.market == "poloniex"):
+		# 	print('Ecxhange with Poloniex')
+		# 	self.conn = poloniex.Poloniex(self.api_key,self.api_secret)
+		# 	if self.vars.backtest:
+		# 		print("Checking the data from "+datetime.datetime.fromtimestamp(int(self.startTime)).strftime('%Y-%m-%d %H:%M:%S') + " to " + datetime.datetime.fromtimestamp(int(self.endTime)).strftime('%Y-%m-%d %H:%M:%S'))
+		#
+		#
+		# 		self.poloData = self.conn.returnChartData(self.pair,self.period,self.startTime,self.endTime)
+		#
+		#
+		# 		#A:poloData is an list (checked with the funtion type(), where each item of the list contains 6 values of the period
+		# 		for datum in self.poloData:
+		# 			#datum is a dict = {key1:value1, key2:value2, ... }
+		# 			if (datum['open'] and datum['close'] and datum['high'] and datum['low']):
+		# 				#putting all this data to the BotCandlestick object
+		# 				self.data.append(BotCandlestick(self.period,datum['open'],datum['close'],datum['high'],datum['low'],datum['weightedAverage'], datum['date']))
 
-
-				self.poloData = self.conn.returnChartData(self.pair,self.period,self.startTime,self.endTime)
-
-
-				#A:poloData is an list (checked with the funtion type(), where each item of the list contains 6 values of the period
-				for datum in self.poloData:
-					#datum is a dict = {key1:value1, key2:value2, ... }
-					if (datum['open'] and datum['close'] and datum['high'] and datum['low']):
-						#putting all this data to the BotCandlestick object
-						self.data.append(BotCandlestick(self.period,datum['open'],datum['close'],datum['high'],datum['low'],datum['weightedAverage'], datum['date']))
-
-		if (exchange == "binance"):
+		if (self.vars.market  == "binance"):
 			# Remember to install binance python script with --> pip install python-binance
 			print('Ecxhange with Binance')
-			if backtest:
+			if self.vars.backtest:
 				# create the Binance client, no need for api key
 				client = Client("", "")
-				klines = client.get_historical_klines(self.vars.pairBinance, getattr(client, self.vars.periodBinance), self.vars.startTimeBinance, self.vars.endTimeBinance)
+				klines = client.get_historical_klines(self.pair, getattr(client, self.period), self.startTime, self.endTime)
 				for kline in klines:
 					self.data.append(BotCandlestick(self.period,kline[1],kline[4],kline[2],kline[3],str((float(kline[1])+float(kline[2])+float(kline[4])+float(kline[3]))/4), int(((kline[0])+(kline[6]))/2000))) #because in miliseconds
 
@@ -170,9 +169,55 @@ class BotChart(object):
 			'desc': 'null'})
 
 
+	def returnData(self):
+		historicalData=self.data
+		dataPoints = []
+		priceData=[]
+		label='null'
+		data=[]
+
+		while True:
+			#step 0: iterating over data points
+			if (self.startTime and historicalData):
+				nextDataPoint = historicalData.pop(0)  #https://stackoverflow.com/a/4426727/5176549
+				lastPairPrice = nextDataPoint.priceAverage
+				priceData.append(float(lastPairPrice))
+				movingAverage=self.indicators.movingAverage(priceData,self.vars.movingAvPeriod,lastPairPrice)
+				movingAverage2=self.indicators.movingAverage(priceData,self.vars.movingAvPeriod2,lastPairPrice)
+				label=nextDataPoint.label
+				dataDate = datetime.datetime.fromtimestamp(int(nextDataPoint.date)).strftime('%Y-%m-%d %H:%M:%S')
+				#adding the trades on the label
+
+			#step 2: once the iteration is finished, adding all the info in the chart
+			elif(self.startTime and not historicalData):
+				print ("Finished")
+				for point in dataPoints:
+
+					data.append([self.stringToDate(point['date']),point['price'],point['label'],point['desc'],point['movAv1'],point['movAv2']])
+
+				break
+
+			#step 1: addind the last point on the list
+			else:
+				currentValues = conn.api_query("returnTicker")
+				lastPairPrice = currentValues[pair]["last"]
+				dataDate = datetime.datetime.now()
+
+			#Main step: appending values to local dataPoints
+			dataPoints.append({
+			'date':dataDate,
+			'price': str(lastPairPrice),
+			'movAv1': str(movingAverage),
+			'movAv2': str(movingAverage2),
+			'label': label,
+			'desc': 'null'})
+		return data
+
+
 	def stringToDate(self , date):
 		#date is the follwing format: date='2017-12-27 11:50:00'
 		return "new Date("+date[0:4]+", "+date[5:7]+", "+date[8:10]+", "+date[11:13]+", "+date[14:16]+")"
+		# "new Date(%d,%d,%d,%d,%d,%d,%d)" (int(date[0:4]),int(date[5:7]),int(date[8:10]),int(date[11:13]),int(date[14:16]))
 
 
 	def creatChartRSI(self):
