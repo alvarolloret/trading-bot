@@ -81,6 +81,7 @@ class BotChart(object):
 				  ]
 				]
 			    """
+				
 		# d = self.data[0].__dict__
 		# print (d)
 
@@ -133,6 +134,7 @@ class BotChart(object):
 		output.write(self.botHTML.begin)
 
 		while True:
+
 			#step 0: iterating over data points
 			if (self.startTime and historicalData):
 				nextDataPoint = historicalData.pop(0)  #https://stackoverflow.com/a/4426727/5176549
@@ -146,7 +148,8 @@ class BotChart(object):
 
 			#step 2: once the iteration is finished, adding all the info in the chart
 			elif(self.startTime and not historicalData):
-				print ("Finished")
+				print ("Finished Writing data on chart")
+
 				for point in dataPoints:
 					output.write("["+self.stringToDate(point['date'])+","+point['price']+","+point['label']+","+point['desc']+","+point['movAv1']+","+point['movAv2'])
 					output.write("],\n")
