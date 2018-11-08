@@ -23,15 +23,13 @@ class User(models.Model):
     last_name = models.CharField(max_length=128)
     email = models.EmailField(max_length=254,unique=True)
     def __str__(self):
-        return self.date
+        return self.first_name
 
 
-class CandleStick(models.Model):
-    date = models.IntegerField(default=170)
+class CandleStick_4H_ETH_USDT(models.Model):
+    date = models.DateTimeField(default="2018-01-23 15:55")
     high = models.FloatField(default=0)
     low = models.FloatField(default=0)
     open = models.FloatField(default=0)
     close = models.FloatField(default=0)
-
-    def __str__(self):
-        return self.date
+    average = models.FloatField(default=0)

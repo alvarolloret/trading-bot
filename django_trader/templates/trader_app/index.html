@@ -1,0 +1,23 @@
+<!DOCTYPE html> {% extends "trader_app/base.html" %} {% block body_block%}
+
+<h1 class="display-3">Machine Learning Bot Trader </h1>
+<p class="lead">First test for bot trader</p>
+<hr class="my-2">
+<p class="lead"></p>
+
+{# Some logic on what to display for last item#}
+{% if user.is_authenticated %}
+    <p>Choose one of the two</p>
+    <div class="col-md-6 boxy ">
+      <a class="btn btn-primary btn-lg" href="{% url 'trader_app:livetesting' %}">Live Trading</a>
+    </div>
+
+    <div class="col-md-6 boxy ">
+      <a class="btn btn-primary btn-lg" href="{% url 'trader_app:backtest' %}">Backtest</a>
+    </div>
+{% else %}
+    <div class="col-md-6 boxy ">
+      <a class="btn btn-primary btn-lg" href="{% url 'trader_app:user_login' %}">Login</a>
+    </div>
+{% endif %} {% endblock %}
+<!-- <div class="container"> -->

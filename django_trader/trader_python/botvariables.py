@@ -11,10 +11,13 @@ class botVariables(object):
 
 		#for backtesting you need a start and endtime
 		if (self.market=="binance"):
+			self.database="CandleStick_4H_ETH_USDT" #See databases available in sqlite
 			self.pair='ETHUSDT'	#For binance
 			self.period="KLINE_INTERVAL_4HOUR" 	#For binance: KLINE_INTERVAL_12HOUR, 15MINUTE, 1DAY, 1HOUR, 1MINUTE, ETC, see : https://python-binance.readthedocs.io/en/latest/binance.html
 			self.startTime=str(mktime(time.strptime('2018-02-01 17:00:00', '%Y-%m-%d %H:%M:%S')))
 			self.endTime=str(mktime(time.strptime('2018-06-01 17:00:00', '%Y-%m-%d %H:%M:%S')))
+
+
 		elif (self.market=="poloniex"):
 			self.pair="USDT_ETH"     	#For poloniex
 			self.period=14400  			#Poloniex: In seconds, valid values are 300, 900, 1800, 7200 (2h), 14400 (4h), and 86400 (1d)

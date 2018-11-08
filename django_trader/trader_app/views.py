@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect,HttpResponse
-from trader_app.models import User, CandleStick
+from trader_app.models import User
 from datetime import datetime
 from . import forms
 
@@ -13,6 +13,7 @@ from trader_python.botchart import BotChart
 from trader_python.botstrategy import BotStrategy
 from trader_python.botlog import BotLog
 from trader_python.botcandlestick import BotCandlestick
+from trader_python.botdatabase import BotDatabase
 from colorama import init  # THis is only for color printing
 
 
@@ -24,6 +25,13 @@ from django.urls import reverse
 
 
 def index(request):
+
+    # variables = botVariables()
+    # database=BotDatabase(variables)
+    # start=datetime.fromtimestamp(float(variables.startTime)).strftime('%Y-%m-%d %H:%M')
+    # end=datetime.fromtimestamp(float(variables.endTime)).strftime('%Y-%m-%d %H:%M')
+    # database.retrieveValuesDatabase(start, end)
+
     return render(request, 'trader_app/index.html')
 
 def outputResult(request):
@@ -86,8 +94,7 @@ def backtest(request):
                     strategy.tick(candlestick)
 
                 strategy.showMargin()
-                # dataChart=chart.returnData()
-                dataChart=[]
+                dataChart=chart.returnData()
                 chart.createChart()
 
             #---------------END: Part 1: Backtesting--------------------#
