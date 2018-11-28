@@ -21,25 +21,54 @@ from colorama import init  # THis is only for color printing
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from trader_app.forms import UserForm,UserProfileInfoForm
+from django.shortcuts import redirect
 from django.urls import reverse
+from . import models
+from django.views.generic import (View,TemplateView,
+                                ListView,DetailView,
+                                CreateView,DeleteView,
+                                UpdateView)
 
+
+# For reading DateTimeField, see outputResult
+# https://stackoverflow.com/a/27058505/5176549
+import json
+class DateTimeEncoder(json.JSONEncoder):
+    def default(self, o):
+        if isinstance(o, datetime):
+            return o.isoformat()
+        return json.JSONEncoder.default(self, o)
 
 def index(request):
-
-    # variables = botVariables()
-    # database=BotDatabase(variables)
-    # start=datetime.fromtimestamp(float(variables.startTime)).strftime('%Y-%m-%d %H:%M')
-    # end=datetime.fromtimestamp(float(variables.endTime)).strftime('%Y-%m-%d %H:%M')
-    # database.retrieveValuesDatabase(start, end)
-
     return render(request, 'trader_app/index.html')
 
-def outputResult(request):
-    return render(request, 'trader_app/outputResult.html')
+# def outputResult(request):
+#     print ("hola?")
+#     # https://stackoverflow.com/a/32787887/5176549
+#     dataChartRetrieved=request.session.get('data')
+#     return render(request, 'trader_app/outputResult.html', {'data':dataChartRetrieved})
+
+class outputResult(ListView):
+    # https://stackoverflow.com/a/33350839/5176549
+    model = models.CandleStick
+    # paginate_by = 10
+
+    def get_queryset(self):
+        filter_val = self.request.GET.get('filter', 'give-default-value')
+        order = self.request.GET.get('orderby', 'give-default-value')
+        new_context = Update.objects.filter(
+            state=filter_val,
+        )
+        return new_context
+
+    def get_context_data(self, **kwargs):
+        context = super(MyView, self).get_context_data(**kwargs)
+        context['filter'] = self.request.GET.get('filter', 'give-default-value')
+        context['orderby'] = self.request.GET.get('orderby', 'give-default-value')
+        return context
 
 
 def livetesting(request):
-    print ("hola?")
     return render(request, 'trader_app/livetesting.html')
 
 
@@ -49,10 +78,11 @@ def backtest(request):
     if request.method == 'POST':
         form = forms.FormBacktest(request.POST)
         if form.is_valid():
-            # DO SOMETHING CODE
             print("VALIDATION SUCCESS!")
             print("Start: " + str(form.cleaned_data['dateStart']))
             print("End: " + str(form.cleaned_data['dateEnd']))
+            print("Pair: " + str(form.cleaned_data['pairChosen']))
+            print("Period: " + str(form.cleaned_data['periodChosen']))
 
 
             init()  # THis is only for color printing
@@ -61,8 +91,12 @@ def backtest(request):
             variables = botVariables()
             time1=form.cleaned_data['dateStart'].strftime('%Y-%m-%d %H:%M:%S')
             time2=form.cleaned_data['dateEnd'].strftime('%Y-%m-%d %H:%M:%S')
+            pair=form.cleaned_data['pairChosen']
+            period=form.cleaned_data['periodChosen']
             variables.modifyStartTime(time1)
             variables.modifyEndTime(time2)
+            variables.modifyPair(pair)
+            variables.modifyPeriod(period)
 
 
 
@@ -78,32 +112,30 @@ def backtest(request):
                        ", period: " + str(variables.period)))
                 print(("Start: " + str(variables.startTime) +
                        ", End: " + str(variables.endTime)))
-                chart = BotChart(variables)
 
-                #--------------------------------------------------------------#
-                #---------Part 1.2: initialisating the bot strategy------------#
-                #--------------------------------------------------------------#
+
+                database=BotDatabase(variables)
+                data=database.retrieveValuesDatabase()
+
+
                 strategy = BotStrategy()
 
-                #--------------------------------------------------------------#
-                #---------Part 1.3: Evaluating each candlestic from the chart--#
-                #--------------------------------------------------------------#
-                #--------------------USING THE STRATEGY TICK-------------------#
-                #--------------------------------------------------------------#
-                for candlestick in chart.getPoints():
+                for candlestick in data:
                     strategy.tick(candlestick)
+                    database.addStrategyCandlestick()
 
                 strategy.showMargin()
-                dataChart=chart.returnData()
-                chart.createChart()
 
-            #---------------END: Part 1: Backtesting--------------------#
+                chart = BotChart(variables, data)
+                dataChart=chart.returnData()
+                data= json.dumps( dataChart, default=DateTimeEncoder)
+                request.session['data'] = data
+
 
             else:
                 print("TODO: Live trading")
 
-
-            return render(request, 'trader_app/outputResult.html', {'data': dataChart})
+            return  redirect('/trader_app/outputResult',   kwargs={ 'data': dataChart })
     return render(request, 'trader_app/backtest.html', {'form':form})
 
 

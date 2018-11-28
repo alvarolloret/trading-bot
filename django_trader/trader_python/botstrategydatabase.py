@@ -10,7 +10,7 @@ from binance.client import Client
 from django.core.serializers.json import DjangoJSONEncoder
 
 
-class BotDatabase(object):
+class BotStrategyDatabase(object):
     def __init__(self, variables):
         self.vars = variables
         self.pair = self.vars.pair
@@ -50,9 +50,6 @@ class BotDatabase(object):
             '2018-08-01', '%Y-%m-%d')))
         print ("Populating database from: "+self.startTime + " to: "+self.endTime)
         self.loadValues()
-
-    def addStrategyCandlestick(self):
-        # TODO: The hole implementation to add in views candlestick
 
 
     def loadValues(self):

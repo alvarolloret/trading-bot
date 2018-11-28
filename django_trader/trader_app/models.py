@@ -26,10 +26,19 @@ class User(models.Model):
         return self.first_name
 
 
-class CandleStick_4H_ETH_USDT(models.Model):
+class CandleStick(models.Model):
+    pair = models.CharField(max_length=20, default="USDT_ETH")
+    period = models.CharField(max_length=20, default="KLINE_INTERVAL_4HOUR")
     date = models.DateTimeField(default="2018-01-23 15:55")
     high = models.FloatField(default=0)
     low = models.FloatField(default=0)
     open = models.FloatField(default=0)
     close = models.FloatField(default=0)
     average = models.FloatField(default=0)
+
+class Strategy(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    strategy_number= models.PositiveIntegerField()
+    stock_price= models.ForeignKey(CandleStick , on_delete=models.CASCADE)
+    buy= models.BooleanField()
+    sell= models.BooleanField()

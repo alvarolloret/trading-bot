@@ -35,7 +35,7 @@ class BotTrade(object):
 	def showTrade(self):
 		tradeStatus=""
 		if (self.status == "CLOSED"):
-			tradeStatus += datetime.datetime.fromtimestamp(self.exitTime).strftime('%Y-%m-%d %H:%M:%S')+" "+ str(self.status) + " Entry: "+str(self.entryPrice)+" Exit: "+str(self.exitPrice)
+			tradeStatus += (self.exitTime).strftime('%Y-%m-%d %H:%M:%S')+" "+ str(self.status) + " Entry: "+str(self.entryPrice)+" Exit: "+str(self.exitPrice)
 			tradeStatus = tradeStatus + " Profit: "
 			if (self.exitPrice > self.entryPrice):
 				tradeStatus = tradeStatus + "\033[92m"

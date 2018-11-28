@@ -120,7 +120,7 @@ class BotStrategy(object):
         tradeStatus="Stat"
         for trade in self.trades:
             if (trade.status == "CLOSED"):
-                tradeStatus=datetime.datetime.fromtimestamp(trade.exitTime).strftime('%Y-%m-%d %H:%M:%S')+" "+ str(trade.status) + " Entry: "+str(round(trade.entryPrice, 2))+" Exit: "+str(round(trade.exitPrice, 2))
+                tradeStatus=(trade.exitTime).strftime('%Y-%m-%d %H:%M:%S')+" "+ str(trade.status) + " Entry: "+str(round(trade.entryPrice, 2))+" Exit: "+str(round(trade.exitPrice, 2))
                 self.makeInvesment(trade) #considering the trade as an indicator
                 tradeStatus = tradeStatus + " Profit: "
                 if (trade.exitPrice > trade.entryPrice):

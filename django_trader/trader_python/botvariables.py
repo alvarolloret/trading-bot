@@ -11,11 +11,32 @@ class botVariables(object):
 
 		#for backtesting you need a start and endtime
 		if (self.market=="binance"):
-			self.database="CandleStick_4H_ETH_USDT" #See databases available in sqlite
+			print('Ecxhange with Binance')
+			self.database="CandleStick" #See databases available in sqlite
 			self.pair='ETHUSDT'	#For binance
 			self.period="KLINE_INTERVAL_4HOUR" 	#For binance: KLINE_INTERVAL_12HOUR, 15MINUTE, 1DAY, 1HOUR, 1MINUTE, ETC, see : https://python-binance.readthedocs.io/en/latest/binance.html
 			self.startTime=str(mktime(time.strptime('2018-02-01 17:00:00', '%Y-%m-%d %H:%M:%S')))
 			self.endTime=str(mktime(time.strptime('2018-06-01 17:00:00', '%Y-%m-%d %H:%M:%S')))
+
+			"""
+			  Get Historical Klines from Binance
+			  [
+				[
+				  1499040000000,      // 0.Open time 1517803200000
+				  "0.01634790",       // 1.Open
+				  "0.80000000",       // 2.High
+				  "0.01575800",       // 3.Low
+				  "0.01577100",       // 4.Close
+				  "148976.11427815",  // 5.Volume
+				  1499644799999,      // 6.Close time
+				  "2434.19055334",    // 7.Quote asset volume
+				  308,                // 8.Number of trades
+				  "1756.87402397",    // 9.Taker buy base asset volume
+				  "28.46694368",      // 10.Taker buy quote asset volume
+				  "17928899.62484339" // Ignore.
+				]
+			  ]
+			  """
 
 
 		elif (self.market=="poloniex"):
@@ -70,3 +91,9 @@ class botVariables(object):
 	def modifyEndTime(self, time2):
 		# the time must be in the following form:  startTime=(2017, 1, 1, 0, 0)
 		self.endTime=time2
+
+	def modifyPair(self, pair):
+		self.pair=pair
+
+	def modifyPeriod(self, period):
+		self.period=period
